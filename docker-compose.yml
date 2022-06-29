@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+
+  user-authentication:
+    build: .
+    container_name: user-authentication
+    ports:
+      - 8080:8080
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    build:
+      context: docker/mongo
+    container_name: mongodb
+    ports:
+      - 27017:27017
+    volumes:
+      - ./init-mongodb:/docker-entrypoint-initdb.d
+      - ./init-mongodb/data:/tmp/data

@@ -21,4 +21,8 @@ public class UserEntity {
   private String address;
   private ProfileTypeEnum profile;
 
+  public boolean isAdmin(){
+    return profile == ProfileTypeEnum.ADMIN;
+  }
+
 }

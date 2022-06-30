@@ -2,6 +2,7 @@ package com.arj.userauthentication.services;
 
 import com.arj.userauthentication.dtos.PageResponse;
 import com.arj.userauthentication.dtos.UserDTO;
+import com.arj.userauthentication.dtos.UserResponse;
 import com.arj.userauthentication.entities.UserEntity;
 import com.arj.userauthentication.enums.ProfileTypeEnum;
 import com.arj.userauthentication.enums.SequencesEnum;
@@ -9,6 +10,8 @@ import com.arj.userauthentication.exceptions.NotFoundException;
 import com.arj.userauthentication.exceptions.SequenceException;
 import com.arj.userauthentication.repositories.CustomUserInterface;
 import com.arj.userauthentication.repositories.UserRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -42,9 +45,19 @@ public class UserService  {
   }
 
   public PageResponse retrieveUsersWithPagination(int page, int size, String sort, String name, String email, String profile) {
-    Page<UserEntity> pageUsers = customUserInterface.findAllWithPagination(page, size, sort, name, email, ProfileTypeEnum.valueOf(profile));
+    ProfileTypeEnum profileTypeEnum = null;
+    if(profile != null){
+      profileTypeEnum = ProfileTypeEnum.valueOf(profile);
+    }
 
-    return new PageResponse(pageUsers.getContent(), pageUsers.getNumber(), pageUsers.getTotalElements(), pageUsers.getTotalPages());
+    Page<UserEntity> pageUsers = customUserInterface.findAllWithPagination(page, size, sort, name, email, profileTypeEnum);
+
+    List<UserResponse> userResponses = pageUsers.getContent()
+        .stream()
+        .map(user -> modelMapper.map(user, UserResponse.class))
+        .collect(Collectors.toList());
+
+    return new PageResponse(userResponses, pageUsers.getNumber(), pageUsers.getTotalElements(), pageUsers.getTotalPages());
   }
 
   public void deleteUser(Long userId) throws NotFoundException {
@@ -76,7 +89,5 @@ public class UserService  {
 
     return modelMapper.map(userEntity, UserDTO.class);
   }
-
-
 
 }

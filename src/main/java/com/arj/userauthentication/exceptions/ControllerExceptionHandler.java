@@ -9,6 +9,7 @@ import javax.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -45,6 +46,15 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     list.add(ex.getMessage());
 
     ErrorResponse error = new ErrorResponse(ERROR_UNABLE_COMPLETE_REQUEST, list);
+    return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(AccessDeniedException.class)
+  protected ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
+    List<String> list = new ArrayList<>();
+    list.add(ex.getMessage());
+
+    ErrorResponse error = new ErrorResponse("Operation not allowed for this user level", list);
     return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
   }
 

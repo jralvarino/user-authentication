@@ -1,6 +1,5 @@
 package com.arj.userauthentication.controllers;
 
-import com.arj.userauthentication.annotations.profile.ProfileType;
 import com.arj.userauthentication.dtos.PageResponse;
 import com.arj.userauthentication.dtos.UserDTO;
 import com.arj.userauthentication.exceptions.NotFoundException;
@@ -8,6 +7,7 @@ import com.arj.userauthentication.exceptions.SequenceException;
 import com.arj.userauthentication.services.UserService;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,18 +31,21 @@ public class UserController {
     this.userService = userService;
   }
 
+  @PreAuthorize("hasRole('ADMIN')")
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public UserDTO createUser(@Valid @RequestBody UserDTO userDTO) throws SequenceException {
     return userService.createUser(userDTO);
   }
 
+  @PreAuthorize("hasRole('ADMIN')")
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
   public UserDTO updateUser(@PathVariable(value = "id") Long userId, @Valid @RequestBody UserDTO userDTO) throws NotFoundException {
     return userService.updateUser(userId, userDTO);
   }
 
+  @PreAuthorize("hasRole('ADMIN')")
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
   public void deleteUser(@PathVariable(value = "id") Long userId) throws NotFoundException {
@@ -56,8 +59,8 @@ public class UserController {
                                     @RequestParam String sort,
                                     @RequestParam(value = "name", required = false) String name,
                                     @RequestParam(value = "email", required = false) String email,
-                                    @Valid @ProfileType(message = "Profile not found") @RequestParam(value = "profile", required = false) String profile) {
-    return userService.retrieveUsersWithPagination(page, size, sort, name, email, profile);
+                                    @RequestParam(value = "profile", required = false) String profile) {
+    return userService.retrieveUsersWithPagination(page, size, sort, name, email, null);
   }
 
 }

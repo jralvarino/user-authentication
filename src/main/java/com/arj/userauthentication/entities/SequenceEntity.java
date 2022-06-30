@@ -7,8 +7,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @AllArgsConstructor
-@Document(collection = "sequence")
-public class Sequence {
+@Document(collection = "sequences")
+public class SequenceEntity {
 
   @Id
   private String id;

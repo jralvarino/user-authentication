@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.*;
 
-import com.arj.userauthentication.entities.Sequence;
+import com.arj.userauthentication.entities.SequenceEntity;
 import com.arj.userauthentication.enums.SequencesEnum;
 import com.arj.userauthentication.exceptions.SequenceException;
 import org.junit.jupiter.api.Assertions;
@@ -35,8 +35,8 @@ class SequenceGeneratorServiceTest {
     Update update = new Update();
     update.inc("value", 1);
 
-    Sequence sequenceMock = new Sequence(SequencesEnum.SEQUENCE_USERS.getName(), 2);
-    Mockito.when(mongoOperations.findAndModify(eq(query), eq(update), any(), eq(Sequence.class))).thenReturn(sequenceMock);
+    SequenceEntity sequenceMock = new SequenceEntity(SequencesEnum.SEQUENCE_USERS.getName(), 2);
+    Mockito.when(mongoOperations.findAndModify(eq(query), eq(update), any(), eq(SequenceEntity.class))).thenReturn(sequenceMock);
 
     //Act
     long sequence = 0;

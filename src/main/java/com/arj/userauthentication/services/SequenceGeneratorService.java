@@ -1,6 +1,6 @@
 package com.arj.userauthentication.services;
 
-import com.arj.userauthentication.entities.Sequence;
+import com.arj.userauthentication.entities.SequenceEntity;
 import com.arj.userauthentication.enums.SequencesEnum;
 import com.arj.userauthentication.exceptions.SequenceException;
 
@@ -30,7 +30,7 @@ public class SequenceGeneratorService {
     FindAndModifyOptions options = new FindAndModifyOptions();
     options.returnNew(true).upsert(true);
 
-    Sequence sequence = mongoOperations.findAndModify(query, update, options, Sequence.class);
+    SequenceEntity sequence = mongoOperations.findAndModify(query, update, options, SequenceEntity.class);
 
     if (sequence == null) throw new SequenceException("Unable to get sequence id for key : " + sequenceEnum.getName());
 

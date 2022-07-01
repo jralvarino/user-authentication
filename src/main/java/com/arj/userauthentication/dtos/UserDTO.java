@@ -2,9 +2,13 @@ package com.arj.userauthentication.dtos;
 
 import com.arj.userauthentication.annotations.profile.ProfileType;
 import javax.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDTO {
 
   @NotEmpty(message = "Name must to be informed")

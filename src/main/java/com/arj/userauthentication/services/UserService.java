@@ -8,6 +8,7 @@ import com.arj.userauthentication.enums.ProfileTypeEnum;
 import com.arj.userauthentication.enums.SequencesEnum;
 import com.arj.userauthentication.exceptions.NotFoundException;
 import com.arj.userauthentication.exceptions.SequenceException;
+import com.arj.userauthentication.exceptions.UserAlreadyExistException;
 import com.arj.userauthentication.repositories.CustomUserInterface;
 import com.arj.userauthentication.repositories.UserRepository;
 import java.util.List;
@@ -34,7 +35,11 @@ public class UserService  {
     this.customUserInterface = customUserInterface;
   }
 
-  public UserDTO createUser(UserDTO userDTO) throws SequenceException {
+  public UserDTO createUser(UserDTO userDTO) throws SequenceException, UserAlreadyExistException {
+    if(userRepository.findByEmail(userDTO.getEmail()) != null){
+      throw new UserAlreadyExistException("The email provided already exists in the database");
+    }
+
     UserEntity userEntity = convertDtoToEntity(userDTO);
     userEntity.setId(sequenceGeneratorService.nextSequence(SequencesEnum.SEQUENCE_USERS));
     userEntity.setPassword(passwordEncoder.encode(userDTO.getPassword()));
@@ -66,8 +71,14 @@ public class UserService  {
     userRepository.delete(user);
   }
 
-  public UserDTO updateUser(Long userId, UserDTO userDTO) throws NotFoundException {
-    userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+  public UserDTO updateUser(Long userId, UserDTO userDTO) throws NotFoundException, UserAlreadyExistException {
+    UserEntity userInDatabase = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found"));
+
+    if(!userDTO.getEmail().equals(userInDatabase.getEmail())){
+      if(userRepository.findByEmail(userDTO.getEmail()) != null){
+        throw new UserAlreadyExistException("The email provided already exists in the database");
+      }
+    }
 
     UserEntity userEntity = convertDtoToEntity(userDTO);
     userEntity.setId(userId);
@@ -79,14 +90,10 @@ public class UserService  {
   }
 
   private UserEntity convertDtoToEntity(UserDTO userDTO) {
-    modelMapper.getConfiguration().setAmbiguityIgnored(true);
-
     return modelMapper.map(userDTO, UserEntity.class);
   }
 
   private UserDTO convertEntityToDto(UserEntity userEntity) {
-    modelMapper.getConfiguration().setAmbiguityIgnored(true);
-
     return modelMapper.map(userEntity, UserDTO.class);
   }
 

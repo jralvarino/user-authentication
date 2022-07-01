@@ -4,6 +4,7 @@ import com.arj.userauthentication.dtos.PageResponse;
 import com.arj.userauthentication.dtos.UserDTO;
 import com.arj.userauthentication.exceptions.NotFoundException;
 import com.arj.userauthentication.exceptions.SequenceException;
+import com.arj.userauthentication.exceptions.UserAlreadyExistException;
 import com.arj.userauthentication.services.UserService;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -34,14 +35,14 @@ public class UserController {
   @PreAuthorize("hasRole('ADMIN')")
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public UserDTO createUser(@Valid @RequestBody UserDTO userDTO) throws SequenceException {
+  public UserDTO createUser(@Valid @RequestBody UserDTO userDTO) throws SequenceException, UserAlreadyExistException {
     return userService.createUser(userDTO);
   }
 
   @PreAuthorize("hasRole('ADMIN')")
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.OK)
-  public UserDTO updateUser(@PathVariable(value = "id") Long userId, @Valid @RequestBody UserDTO userDTO) throws NotFoundException {
+  public UserDTO updateUser(@PathVariable(value = "id") Long userId, @Valid @RequestBody UserDTO userDTO) throws NotFoundException, UserAlreadyExistException {
     return userService.updateUser(userId, userDTO);
   }
 
@@ -60,7 +61,7 @@ public class UserController {
                                     @RequestParam(value = "name", required = false) String name,
                                     @RequestParam(value = "email", required = false) String email,
                                     @RequestParam(value = "profile", required = false) String profile) {
-    return userService.retrieveUsersWithPagination(page, size, sort, name, email, null);
+    return userService.retrieveUsersWithPagination(page, size, sort, name, email, profile);
   }
 
 }

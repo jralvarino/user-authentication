@@ -13,12 +13,12 @@
 					"basic": [
 						{
 							"key": "password",
-							"value": "12356",
+							"value": "123",
 							"type": "string"
 						},
 						{
 							"key": "username",
-							"value": "xpto-admin",
+							"value": "admin@xpto.com",
 							"type": "string"
 						}
 					]
@@ -26,7 +26,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/user/3",
+					"raw": "http://localhost:8080/user/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -34,7 +34,7 @@
 					"port": "8080",
 					"path": [
 						"user",
-						"3"
+						"2"
 					]
 				}
 			},
@@ -48,7 +48,7 @@
 					"basic": [
 						{
 							"key": "username",
-							"value": "xpto-admin",
+							"value": "admin@xpto.com",
 							"type": "string"
 						},
 						{
@@ -70,7 +70,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/user/15",
+					"raw": "http://localhost:8080/user/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -78,7 +78,7 @@
 					"port": "8080",
 					"path": [
 						"user",
-						"15"
+						"2"
 					]
 				}
 			},
@@ -92,7 +92,7 @@
 					"basic": [
 						{
 							"key": "username",
-							"value": "xpto-user",
+							"value": "admin@xpto.com",
 							"type": "string"
 						},
 						{
@@ -146,7 +146,7 @@
 					"basic": [
 						{
 							"key": "username",
-							"value": "xpto-admin",
+							"value": "admin@xpto.com",
 							"type": "string"
 						},
 						{

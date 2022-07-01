@@ -40,8 +40,8 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
   }
 
-  @ExceptionHandler(NotFoundException.class)
-  protected ResponseEntity<ErrorResponse> handleNotFoundException(final NotFoundException ex) {
+  @ExceptionHandler({NotFoundException.class, UserAlreadyExistException.class})
+  protected ResponseEntity<ErrorResponse> handleNotFoundException(final Exception ex) {
     List<String> list = new ArrayList<>();
     list.add(ex.getMessage());
 
